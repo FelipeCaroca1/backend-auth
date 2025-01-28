@@ -2,6 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs'); // Para encriptar contraseñas
 const User = require('../models/User');
+const verifyToken = require('../middleware/authMiddleware'); // Importar middleware de autenticación
 
 const router = express.Router();
 
@@ -65,5 +66,9 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Error en el servidor', error });
   }
 });
+
+router.get('/verifytoken', verifyToken, (req, res) => {
+    res.json({ message: 'Token válido', user: req.user });
+  });
 
 module.exports = router;
