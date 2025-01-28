@@ -14,11 +14,14 @@ const PORT = process.env.PORT || 5000;
 
 // Conexión a MongoDB
 mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log('Conexión a MongoDB establecida');
+
+    // Importar rutas **después** de conectar a la base de datos
+    const userRoutes = require('./routes/userRoutes');
+    app.use('/api/user', userRoutes);
   })
-  .then(() => console.log('Conexión a MongoDB establecida'))
   .catch((error) => console.error('Error al conectar a MongoDB:', error));
 
 // Ruta de prueba
