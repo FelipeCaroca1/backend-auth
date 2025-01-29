@@ -4,10 +4,20 @@ const Product = require('../models/Product');
 
 const router = express.Router();
 
-// 🟢 Crear un producto (solo usuarios autenticados)
+// 🟢 Crear un producto (solo usuarios autenticados) con validaciones mejoradas
 router.post('/create', verifyToken, async (req, res) => {
   try {
     const { name, description, price } = req.body;
+
+    // Validaciones
+    if (!name || !description || price === undefined) {
+      return res.status(400).json({ message: 'Todos los campos son obligatorios' });
+    }
+
+    if (typeof price !== 'number' || price <= 0) {
+      return res.status(400).json({ message: 'El precio debe ser un número positivo' });
+    }
+
     const newProduct = new Product({
       name,
       description,
@@ -44,7 +54,7 @@ router.get('/readone/:id', async (req, res) => {
   }
 });
 
-// 🟠 Actualizar un producto (solo el creador)
+// 🟠 Actualizar un producto (solo el creador) con validaciones mejoradas
 router.put('/update/:id', verifyToken, async (req, res) => {
   try {
     const { name, description, price } = req.body;
@@ -57,10 +67,19 @@ router.put('/update/:id', verifyToken, async (req, res) => {
       return res.status(403).json({ message: 'No tienes permiso para editar este producto' });
     }
 
+    // Validaciones
+    if (!name || !description || price === undefined) {
+      return res.status(400).json({ message: 'Todos los campos son obligatorios' });
+    }
+
+    if (typeof price !== 'number' || price <= 0) {
+      return res.status(400).json({ message: 'El precio debe ser un número positivo' });
+    }
+
     // Actualizar los campos permitidos
-    product.name = name || product.name;
-    product.description = description || product.description;
-    product.price = price || product.price;
+    product.name = name;
+    product.description = description;
+    product.price = price;
 
     await product.save();
     res.json({ message: 'Producto actualizado exitosamente', product });
