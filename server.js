@@ -21,6 +21,9 @@ mongoose
     // Importar rutas **después** de conectar a la base de datos
     const userRoutes = require('./routes/userRoutes');
     app.use('/api/user', userRoutes);
+    const productRoutes = require('./routes/productRoutes'); // Importar rutas de productos
+    app.use('/api/product', productRoutes); // Usar rutas de productos
+
   })
   .catch((error) => console.error('Error al conectar a MongoDB:', error));
 
