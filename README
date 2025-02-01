@@ -1,0 +1,51 @@
+# Backend de Autenticación y Gestión de Productos
+
+**API RESTful para autenticación de usuarios y gestión de productos**, con **JWT para seguridad** y documentación en **Swagger**.
+
+## Tecnologías Utilizadas
+- **Node.js** y **Express.js** ⚡
+- **MongoDB con Mongoose** 🗂️
+- **JWT (JSON Web Token)** 🔐
+- **Swagger para documentación** 📖
+- **CORS para manejo de accesos** 🌍
+- **Thunder Client / Postman para pruebas** 🛠️
+- **Git y GitHub para control de versiones** 📝
+
+## Instalación y Configuración
+
+1. **Clona el repositorio**  
+   ```bash
+   git clone https://github.com/FelipeCaroca1/backend-auth.git
+   cd backend-auth
+
+2. **Instala dependencias**
+   ```bash
+   npm install
+
+3. **Configura las variables de entorno"**
+Crea un archivo .env en la raíz del proyecto y agrega:
+PORT=5000
+MONGO_URI=tu_url_de_mongodb
+JWT_SECRET=tu_clave_secreta
+
+4. **Ejecuta el servidor**
+   ```bash
+   node server.js
+
+## Endpoints principales
+Autenticación de Usuarios
+POST /api/user/register → Registrar un nuevo usuario.
+POST /api/user/login → Iniciar sesión y obtener un token JWT.
+GET /api/user/verifytoken → Verificar la validez del token JWT.
+# Gestión de Productos
+POST /api/product/create → Crear un nuevo producto (requiere autenticación).
+GET /api/product/readall → Obtener todos los productos.
+GET /api/product/readone/{id} → Obtener un producto por su ID.
+PUT /api/product/update/{id} → Actualizar un producto (requiere autenticación).
+DELETE /api/product/delete/{id} → Eliminar un producto (requiere autenticación).
+
+## Documentación con Swagger
+La API está documentada con Swagger en la ruta:
+```bash http://localhost:5000/api-docs
+
+
