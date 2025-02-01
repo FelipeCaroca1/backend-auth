@@ -1,18 +1,20 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 const verifyToken = (req, res, next) => {
   try {
-    const token = req.header('Authorization');
+    let token = req.header('Authorization'); // Obtener el token del header
 
     if (!token) {
       return res.status(401).json({ message: 'Acceso denegado, token requerido' });
     }
 
-    // Quitar "Bearer " del token
-    const tokenWithoutBearer = token.split(" ")[1];
+    // Manejar el caso donde Swagger envía el token sin "Bearer"
+    if (token.startsWith("Bearer ")) {
+      token = token.slice(7, token.length);
+    }
 
     // Verificar el token con la clave secreta
-    const verified = jwt.verify(tokenWithoutBearer, process.env.JWT_SECRET);
+    const verified = jwt.verify(token, process.env.JWT_SECRET);
     req.user = verified; 
 
     next();
@@ -21,4 +23,4 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-module.exports = verifyToken;
+export default verifyToken; // Cambiamos module.exports por export default

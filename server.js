@@ -1,7 +1,11 @@
-require('dotenv').config();
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import swaggerJsDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
+import connectDB from './config/db.js';
+
+dotenv.config();
 
 const app = express();
 
@@ -12,27 +16,41 @@ app.use(express.json());
 // Puerto desde variables de entorno o por defecto 5000
 const PORT = process.env.PORT || 5000;
 
-// Conexión a MongoDB
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log('Conexión a MongoDB establecida');
+// Configuración de Swagger con Autenticación JWT
+const swaggerOptions = {
+    definition: {
+        openapi: "3.0.0",
+        info: {
+            title: "API de Autenticación y Productos",
+            version: "1.0.0",
+            description: "Documentación de la API de autenticación de usuarios y gestión de productos",
+            contact: {
+                name: "Felipe Caroca",
+                email: "felipecaroca24@gmail.com"
+            }
+        },
+        servers: [
+            {
+                url: `http://localhost:${PORT}`,
+                description: "Servidor Local"
+            }
+        ],
+        components: {
+            securitySchemes: {
+                BearerAuth: {
+                    type: "http",
+                    scheme: "bearer",
+                    bearerFormat: "JWT"
+                }
+            }
+        },
+        security: [{ BearerAuth: [] }]
+    },
+    apis: ["./routes/*.js", "./controllers/*.js"]
+};
 
-    // Importar rutas **después** de conectar a la base de datos
-    const userRoutes = require('./routes/userRoutes');
-    app.use('/api/user', userRoutes);
-    const productRoutes = require('./routes/productRoutes'); // Importar rutas de productos
-    app.use('/api/product', productRoutes); // Usar rutas de productos
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-  })
-  .catch((error) => console.error('Error al conectar a MongoDB:', error));
-
-// Ruta de prueba
-app.get('/', (req, res) => {
-  res.send('¡Servidor funcionando correctamente!');
-});
-
-// Levantar el servidor
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+// Conectar a MongoDB y arrancar el servidor
+connectDB(app, PORT);
