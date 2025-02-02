@@ -14,11 +14,11 @@ const productSchema = new mongoose.Schema({
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // Referencia al usuario que creó el producto
+    ref: 'User', 
     required: true,
   },
-}, { timestamps: true }); // Agrega automáticamente createdAt y updatedAt
+}, { timestamps: true }); 
 
 const Product = mongoose.model('Product', productSchema);
 
-export default Product; // Cambiamos module.exports por export default
+export default Product; 
