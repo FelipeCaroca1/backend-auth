@@ -26,6 +26,9 @@ Este backend proporciona una API RESTful para la autenticación de usuarios y la
 ## 📌 Documentación con Swagger
 La API cuenta con documentación interactiva en la ruta `/api-docs`, donde se pueden probar los endpoints y ver su estructura.
 
+## 📌 Deploy
+El backend está desplegado en :https://backend-auth-p5go.onrender.com/api-docs/
+
 ## 📌 Autor
 Felipe Caroca  
 📧 [felipecaroca24@gmail.com](mailto:felipecaroca24@gmail.com)  
