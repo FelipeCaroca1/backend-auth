@@ -31,7 +31,7 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: `http://localhost:${PORT}`,
+                url: process.env.NODE_ENV === 'dev' ? `http://localhost:${PORT}` : "https://backend-auth-p5go.onrender.com",
                 description: "Servidor Local"
             }
         ],
