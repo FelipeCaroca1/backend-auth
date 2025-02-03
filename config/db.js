@@ -14,10 +14,6 @@ const connectDB = async (app, PORT) => {
         const productRoutes = await import('../routes/productRoutes.js');
         app.use('/api/product', productRoutes.default);
 
-       
-        app.listen(PORT, () => {
-            console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-        });
 
     } catch (error) {
         console.error('❌ Error al conectar a MongoDB:', error);

@@ -15,6 +15,13 @@ app.use(express.json());
 
 
 const PORT = process.env.PORT || 5000;
+const PROD_URL = "https://backend-auth-p5go.onrender.com";
+const DEV_URL = `http://localhost:${PORT}`
+
+const SERVER_INFO = process.env.NODE_ENV === 'dev' ? {
+    url: DEV_URL, 
+    description: 'Servidor local'
+} : {url: PROD_URL, description: 'Auth backend'};
 
 
 const swaggerOptions = {
@@ -29,12 +36,7 @@ const swaggerOptions = {
                 email: "felipecaroca24@gmail.com"
             }
         },
-        servers: [
-            {
-                url: process.env.NODE_ENV === 'dev' ? `http://localhost:${PORT}` : "https://backend-auth-p5go.onrender.com",
-                description: "Servidor Local"
-            }
-        ],
+        servers: [SERVER_INFO],
         components: {
             securitySchemes: {
                 BearerAuth: {
@@ -51,6 +53,10 @@ const swaggerOptions = {
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+app.listen(PORT, () => {
+    console.log(`🚀 Servidor corriendo en ${SERVER_INFO.url}`);
+});
 
 
 connectDB(app, PORT);
